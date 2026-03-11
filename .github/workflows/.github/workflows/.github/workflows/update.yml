@@ -1,0 +1,26 @@
+name: Update V2Ray Configs
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download configs
+        run: |
+          curl -L https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt -o sub.txt
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add sub.txt
+          git commit -m "update configs" || echo "no changes"
+          git push
